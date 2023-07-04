@@ -21,7 +21,7 @@ class User {
             return false;
         }
         $result = $db->sql_execute('SELECT * FROM `user` WHERE `id` = :id', ['id' => $id]);
-        if (empty($result)){
+        if (!empty($result)){
             $this->id = $result[0]['id'];
             $this->name = $result[0]['name'];
             return true;
@@ -34,7 +34,7 @@ class User {
             return false;
         }
         $result = $db->sql_execute('SELECT * FROM `user` WHERE `session` = :session AND DATEDIFF(:date, `session_date`) < 60', ['session' => $session, 'date' => date('Y-m-d')]);
-        if (empty($result)){
+        if (!empty($result)){
             $this->id = $result[0]['id'];
             $this->name = $result[0]['name'];
             return true;
@@ -122,6 +122,18 @@ class User {
         } while ($generated == false);
         
         return $session;
+    }
+
+    function get_orders(Database $db):array{
+        if ($db == null or !$db->is_connected()){
+            return [];
+        }
+        
+        $result = $db->sql_execute('SELECT p.title, p.description, o.count, p.price FROM `orders` AS o INNER JOIN `user` AS u ON o.u_id = u.id INNER JOIN `product` AS p ON o.p_id = p.id WHERE u.id = :userid' , ['userid' => $this->id]);
+        if (!empty($result)){
+            return $result;
+        }
+        return [];
     }
 
     
