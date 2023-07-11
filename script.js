@@ -18,3 +18,11 @@ function Logout(){
     fetch("api/logout.php")
     .then(r => location.href="http://"+location.hostname);
 }
+
+function MenuNav(nav){
+    let cur = document.querySelector('#menu .list .selected');
+    document.getElementById(cur.innerText).classList.add('hide');
+    cur.classList.remove('selected');
+    document.getElementById(nav.innerText).classList.remove('hide');
+    nav.classList.add('selected');
+}

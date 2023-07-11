@@ -28,18 +28,18 @@ class Database {
         }
     }
 
-    function is_connected(){
+    function is_connected():bool{
         return $this->connected;
     }
 
-    function get_connection(){
+    function get_connection():PDO{
         return $this->db_connection;
     }
 
-    function sql_execute($sql,$values){
+    function sql_execute($sql,$values=[]):array{
         $st = $this->db_connection->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
         $st->execute($values);
-        return $st->fetchAll();
+        return $st->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }
